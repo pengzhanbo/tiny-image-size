@@ -26,8 +26,14 @@
     "webp",
     "width"
   ],
+  "homepage": "https://github.com/pengzhanbo/tiny-image-size",
+  "bugs": "https://github.com/pengzhanbo/tiny-image-size/issues",
   "license": "MIT",
   "author": "pengzhanbo <q942450674@outlook.com> (https://github.com/pengzhanbo)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengzhanbo/tiny-image-size.git"
+  },
   "files": [
     "dist"
   ],
