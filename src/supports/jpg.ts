@@ -5,7 +5,7 @@ export const isJpg: ImageTypeValidator = (input) => sliceHex(input, 0, 2) === 'f
 
 export const jpgSize: ImageSizeExtractor = (input) => {
   input = input.slice(4)
-  while (input.length) {
+  while (input.length >= 2) {
     const i = uint16(input)
 
     if (i > input.length) {
@@ -17,7 +17,7 @@ export const jpgSize: ImageSizeExtractor = (input) => {
       continue
     }
     const next = input[i + 1]
-    if (next === 0xc0 || next === 0xc1 || next === 0xc2) {
+    if ((next === 0xc0 || next === 0xc1 || next === 0xc2) && i + 9 <= input.length) {
       return {
         width: uint16(input, i + 7),
         height: uint16(input, i + 5),

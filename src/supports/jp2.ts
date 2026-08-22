@@ -20,7 +20,7 @@ export const jp2Size: ImageSizeExtractor = (input) => {
   const jp2hBox = findBox(input, 'jp2h', 0)
   const ihdrBox = jp2hBox && findBox(input, 'ihdr', jp2hBox.offset + 8)
 
-  if (!ihdrBox) {
+  if (!ihdrBox || ihdrBox.size < 16) {
     throw new TypeError('Unsupported JPEG 2000 format')
   }
 

@@ -36,6 +36,22 @@ function createDataView({ buffer, byteOffset }: Uint8Array, offset: number): Dat
 }
 
 /**
+ * Assert that the input has at least the given length, otherwise throw.
+ *
+ * 断言输入的长度至少为给定值，否则抛出错误。
+ *
+ * @param input The input Uint8Array. / 输入的 Uint8Array。
+ * @param length The minimum required length. / 所需的最小长度。
+ * @param message The error message to throw. / 抛出的错误消息。
+ * @throws {TypeError} When the input is shorter than the required length. / 当输入长度小于所需长度时。
+ */
+export function assertLength(input: Uint8Array, length: number, message: string): void {
+  if (input.length < length) {
+    throw new TypeError(message)
+  }
+}
+
+/**
  * Read a 16-bit integer from a Uint8Array.
  *
  * 从 Uint8Array 中读取一个 16 位整数。
@@ -140,15 +156,18 @@ function readBox(input: Uint8Array, offset: number): ImageBox | undefined {
   }
 
   const size = uint32(input, offset)
+  // A size of 0 means the box extends to the end of the file (ISO BMFF).
+  // 大小为 0 表示盒子延伸至文件末尾（ISO BMFF 规范）。
+  const boxSize = size === 0 ? input.length - offset : size
 
-  if (input.length - offset < size) {
+  if (input.length - offset < boxSize) {
     return
   }
 
   return {
     name: slice(input, offset + 4, offset + 8),
     offset,
-    size,
+    size: boxSize,
   }
 }
 
@@ -175,8 +194,7 @@ export function findBox(
     if (box.name === boxName) {
       return box
     }
-    /* v8 ignore next -- @preserve */
-    currentOffset += box.size > 0 ? box.size : 8
+    currentOffset += box.size
   }
 }
 

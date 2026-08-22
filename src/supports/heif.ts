@@ -28,7 +28,7 @@ export const heifSize: ImageSizeExtractor = (input) => {
   const currentOffset = ipcoBox.offset + 8
   const ispeBox = findBox(input, 'ispe', currentOffset)
 
-  if (!ispeBox) {
+  if (!ispeBox || ispeBox.size < 20) {
     throw new TypeError('Invalid HEIF, no ispe box found')
   }
 
@@ -38,9 +38,9 @@ export const heifSize: ImageSizeExtractor = (input) => {
   const clapBox = findBox(input, 'clap', currentOffset)
   let width = rawWidth
   const height = rawHeight
-  if (clapBox && clapBox.offset < ipcoBox.offset + ipcoBox.size) {
+  if (clapBox && clapBox.offset < ipcoBox.offset + ipcoBox.size && clapBox.size >= 16) {
     const cropRight = uint32(input, clapBox.offset + 12)
-    width = rawWidth - cropRight
+    width = Math.max(0, rawWidth - cropRight)
   }
   return { width, height }
 }

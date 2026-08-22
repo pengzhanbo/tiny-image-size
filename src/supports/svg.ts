@@ -43,7 +43,11 @@ function parseLength(len: string): number | undefined {
 }
 
 function parseViewBox(viewBox: string): SVGAttributes {
-  const [, , width = '', height = ''] = viewBox.split(' ')
+  // Split on commas or any whitespace, drop empty segments so both
+  // `viewBox="0 0 123 456"` and `viewBox="0,0,123,456"` parse correctly.
+  // 按逗号或任意空白切分并过滤空段，兼容空格分隔与逗号分隔的 viewBox。
+  const parts = viewBox.split(/[\s,]+/).filter(Boolean)
+  const [, , width = '', height = ''] = parts
   return {
     width: parseLength(width),
     height: parseLength(height),
@@ -81,7 +85,7 @@ function getSizeByViewBox(attrs: SVGAttributes, viewBox: SVGAttributes): ImageSi
   }
 }
 
-export const isSvg: ImageTypeValidator = (input: Uint8Array) => RE_SVG.test(slice(input, 0, 1000))
+export const isSvg: ImageTypeValidator = (input: Uint8Array) => RE_SVG.test(slice(input))
 
 export const svgSize: ImageSizeExtractor = (input: Uint8Array) => {
   const root = slice(input).match(RE_SVG)

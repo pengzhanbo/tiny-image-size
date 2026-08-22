@@ -1,5 +1,5 @@
 import type { ImageSupport, ImageTypeValidator, ImageSizeExtractor } from '../types.js'
-import { slice, uint32, hasOwn } from '../utils.js'
+import { assertLength, hasOwn, slice, uint32 } from '../utils.js'
 
 /**
  * ICNS Header
@@ -44,7 +44,8 @@ const ERROR_MESSAGE = 'Invalid ICNS, no sizes found'
 export const isIcns: ImageTypeValidator = (input) => slice(input, 0, 4) === 'icns'
 
 export const icnsSize: ImageSizeExtractor = (input) => {
-  if (SIZE_HEADER > uint32(input, FILE_LENGTH_OFFSET) || SIZE_HEADER > input.length) {
+  assertLength(input, 12, ERROR_MESSAGE)
+  if (SIZE_HEADER > uint32(input, FILE_LENGTH_OFFSET)) {
     throw new TypeError(ERROR_MESSAGE)
   }
   const type = slice(input, SIZE_HEADER, SIZE_HEADER + ENTRY_LENGTH_OFFSET)

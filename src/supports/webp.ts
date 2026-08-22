@@ -1,10 +1,11 @@
 import type { ImageSupport, ImageTypeValidator, ImageSizeExtractor } from '../types.js'
-import { int16, uint24LE, slice, sliceHex } from '../utils.js'
+import { assertLength, int16, uint24LE, slice, sliceHex } from '../utils.js'
 
 export const isWebp: ImageTypeValidator = (input: Uint8Array) =>
   slice(input, 0, 4) === 'RIFF' && slice(input, 8, 12) === 'WEBP' && slice(input, 12, 15) === 'VP8'
 
 export const webpSize: ImageSizeExtractor = (input: Uint8Array) => {
+  assertLength(input, 30, 'Invalid WebP')
   const chunk = slice(input, 12, 16)
   input = input.slice(20, 30)
   if (chunk === 'VP8X') {

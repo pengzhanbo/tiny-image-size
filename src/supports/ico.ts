@@ -16,9 +16,14 @@ export function isIcoLike(input: Uint8Array, type: number): boolean {
 
 export const isIco: ImageTypeValidator = (input) => isIcoLike(input, 1)
 
-export const icoSize: ImageSizeExtractor = (input) => ({
-  width: input[6] === 0 ? 256 : input[6]!,
-  height: input[7] === 0 ? 256 : input[7]!,
-})
+export const icoSize: ImageSizeExtractor = (input) => {
+  if (input.length < 8) {
+    throw new TypeError('Invalid ICO')
+  }
+  return {
+    width: input[6] === 0 ? 256 : input[6]!,
+    height: input[7] === 0 ? 256 : input[7]!,
+  }
+}
 
 export const ico: ImageSupport = ['ico', isIco, icoSize]

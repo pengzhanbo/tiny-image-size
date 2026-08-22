@@ -27,7 +27,14 @@ export const pnmSize: ImageSizeExtractor = (input) => {
       }
       const [key, value] = line.split(' ')
       if (key && value) {
-        size[key.toLowerCase()] = Number.parseInt(value, 10)
+        const k = key.toLowerCase()
+        if (k === 'width' || k === 'height') {
+          const parsed = Number.parseInt(value, 10)
+          if (!Number.isFinite(parsed) || parsed < 0) {
+            throw new TypeError('Invalid PNM')
+          }
+          size[k] = parsed
+        }
       }
       if (size.height && size.width) {
         return { width: size.width, height: size.height }
@@ -45,10 +52,12 @@ export const pnmSize: ImageSizeExtractor = (input) => {
       break
     }
     if (dimensions.length === 2) {
-      return {
-        width: Number.parseInt(dimensions[0]!, 10),
-        height: Number.parseInt(dimensions[1]!, 10),
+      const width = Number.parseInt(dimensions[0]!, 10)
+      const height = Number.parseInt(dimensions[1]!, 10)
+      if (!Number.isFinite(width) || width < 0 || !Number.isFinite(height) || height < 0) {
+        throw new TypeError('Invalid PNM')
       }
+      return { width, height }
     }
   }
   throw new TypeError('Invalid PNM')

@@ -1,5 +1,5 @@
 import type { ImageSupport, ImageTypeValidator, ImageSizeExtractor } from '../types.js'
-import { uint16, uint32, slice, sliceHex, uint64 } from '../utils.js'
+import { assertLength, uint16, uint32, slice, sliceHex, uint64 } from '../utils.js'
 
 const TAG_WIDTH = 256
 const TAG_HEIGHT = 257
@@ -51,9 +51,10 @@ interface TIFFTags {
 
 function extractTags(input: Uint8Array, isBigEndian: boolean, isBigTiff: boolean): TIFFTags {
   const tags: TIFFTags = {}
+  const entrySize = isBigTiff ? ENTRY_SIZE_BIG : ENTRY_SIZE_STANDARD
 
   let temp: Uint8Array | undefined = input
-  while (temp?.length) {
+  while (temp && temp.length >= entrySize) {
     const code = uint16(temp, 0, !isBigEndian)
 
     if (code === 0) {
@@ -99,6 +100,8 @@ export const tiffSize: ImageSizeExtractor = (input) => {
     if (byteSize !== 8 || reserved !== 0) {
       throw new TypeError('Invalid BigTIFF header')
     }
+    // BigTIFF 头至少 16 字节，否则读取 ifdOffset（uint64@8）会越界。
+    assertLength(input, 16, 'Invalid BigTIFF header')
   }
 
   const ifdOffset = isBigTiff
