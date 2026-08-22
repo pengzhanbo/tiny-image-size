@@ -10,7 +10,6 @@
 - 完整 TypeScript 类型支持
 - 支持自动检测类型，也可显式指定类型以跳过检测
 - 支持 20 种常见图像格式：
-
   `bmp` · `cur` · `dds` · `gif` · `heif` · `icns` · `ico` · `j2c` · `jp2` · `jpg` · `jxl` · `jxl-stream` · `ktx` · `png` · `pnm` · `psd` · `svg` · `tga` · `tiff` · `webp`
 
 ## 安装

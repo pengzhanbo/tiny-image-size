@@ -10,7 +10,6 @@ A zero-dependency TypeScript library that detects image type and dimensions (wid
 - Fully typed with TypeScript
 - Automatic type detection, or pass an explicit type to skip detection
 - Supports 20 common image formats:
-
   `bmp` · `cur` · `dds` · `gif` · `heif` · `icns` · `ico` · `j2c` · `jp2` · `jpg` · `jxl` · `jxl-stream` · `ktx` · `png` · `pnm` · `psd` · `svg` · `tga` · `tiff` · `webp`
 
 ## Install
