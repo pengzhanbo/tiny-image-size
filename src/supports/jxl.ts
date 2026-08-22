@@ -10,6 +10,13 @@ function extractPartialStreams(input: Uint8Array): Uint8Array[] {
     if (!jxlpBox) {
       break
     }
+    // A jxlp box smaller than 12 bytes (8-byte header + 4-byte index) cannot carry a
+    // valid partial codestream, break to avoid an infinite loop / abnormal behavior.
+    // 小于 12 字节（8 字节盒头 + 4 字节索引）的 jxlp 盒子无法承载有效的部分码流，
+    // 直接 break 以避免死循环/异常。
+    if (jxlpBox.size < 12) {
+      break
+    }
     partialStreams.push(input.slice(jxlpBox.offset + 12, jxlpBox.offset + jxlpBox.size))
     offset = jxlpBox.offset + jxlpBox.size
   }
@@ -55,7 +62,7 @@ export const isJxl: ImageTypeValidator = (input) => {
 export const jxlSize: ImageSizeExtractor = (input) => {
   const codestream = extractCodeStream(input)
   if (!codestream) {
-    throw new Error('No codestream found in JXL container')
+    throw new TypeError('No codestream found in JXL container')
   }
   return jxlStreamSize(codestream)
 }
