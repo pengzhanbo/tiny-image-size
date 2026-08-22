@@ -1,0 +1,14 @@
+{
+  "extends": ["@pengzhanbo/tsconfig/tsconfig.json", "@pengzhanbo/tsconfig/tsconfig.lib.json"],
+  "include": ["./src", "tests/supports.jxl.spec.ts"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "isolatedDeclarations": true,
+    "types": ["node"]
+  },
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

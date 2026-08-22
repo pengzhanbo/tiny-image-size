@@ -1,0 +1,31 @@
+* text eol=lf
+*.txt text eol=crlf
+
+*.bmp binary
+*.cur binary
+*.dds binary
+*.gif binary
+*.heif binary
+*.avif binary
+*.heic binary
+*.icns binary
+*.ico binary
+*.j2c binary
+*.jp2 binary
+*.jpg binary
+*.jxl binary
+*.stream binary
+*.ktx binary
+*.ktx2 binary
+*.png binary
+*.pnm binary
+*.pbm binary
+*.pgm binary
+*.ppm binary
+*.pam binary
+*.pfm binary
+*.pgm binary
+*.psd binary
+*.tga binary
+*.tiff binary
+*.webp binary
