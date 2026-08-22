@@ -6,7 +6,7 @@ A zero-dependency TypeScript library that detects image type and dimensions (wid
 
 ## Features
 
-- Zero dependencies, single ESM bundle (~8 KB, including type declarations)
+- Zero dependencies, single ESM bundle (~10 KB, including type declarations)
 - Fully typed with TypeScript
 - Automatic type detection, or pass an explicit type to skip detection
 - Supports 20 common image formats:
