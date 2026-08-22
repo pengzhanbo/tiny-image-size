@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { isTga, tgaSize } from '../src/supports/tga.js'
-import { readValidImage } from './helper.js'
+import { readValidImage, bytesFromHex, hexStr } from './helper.js'
 
 describe('supports > tga', () => {
   it('should validate tga type', async () => {
@@ -11,5 +11,9 @@ describe('supports > tga', () => {
   it('should validate tga size', async () => {
     const img = await readValidImage('tga/sample.tga')
     expect(tgaSize(img)).toEqual({ width: 123, height: 456 })
+  })
+
+  it('should invalidate tga with truncated input', () => {
+    expect(() => tgaSize(bytesFromHex(hexStr('0000', '0100', '0000')))).toThrow('Invalid TGA')
   })
 })

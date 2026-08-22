@@ -112,7 +112,21 @@ describe('supports > svg', () => {
     expect(() => svgSize(img)).toThrow('Invalid SVG')
   })
 
-  it('should validate svg with unparseable viewBox width', () => {
+  it('should validate svg with comma-separated viewBox', () => {
+    const img = new TextEncoder().encode('<svg viewBox="0,0,123,456"></svg>')
+    expect(isSvg(img)).toBe(true)
+    expect(svgSize(img)).toEqual({ width: 123, height: 456 })
+  })
+
+  it('should validate svg with <svg> beyond the first 1000 bytes', () => {
+    const img = new TextEncoder().encode(
+      `<!--${' '.repeat(1500)}--><svg viewBox="0 0 123 456"></svg>`,
+    )
+    expect(isSvg(img)).toBe(true)
+    expect(svgSize(img)).toEqual({ width: 123, height: 456 })
+  })
+
+  it('should invalidate svg with unparseable viewBox width', () => {
     const img = new TextEncoder().encode('<svg width="123" viewBox="0 0 123"></svg>')
     expect(isSvg(img)).toBe(true)
     const size = svgSize(img)

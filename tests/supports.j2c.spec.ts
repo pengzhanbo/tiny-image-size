@@ -16,4 +16,8 @@ describe('supports > j2c', () => {
   it('should invalidate j2c with wrong magic', () => {
     expect(isJ2c(bytesFromHex('00000000'))).toBe(false)
   })
+
+  it('should invalidate j2c with truncated input', () => {
+    expect(() => j2cSize(bytesFromHex('ff4fff51'))).toThrow('Invalid J2C')
+  })
 })

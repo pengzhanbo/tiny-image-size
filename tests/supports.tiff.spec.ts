@@ -60,6 +60,19 @@ describe('supports > tiff', () => {
     expect(() => tiffSize(img)).toThrow('Invalid BigTIFF header')
   })
 
+  it('should invalidate tiff with truncated big tiff header', () => {
+    const img = bytesFromHex(hexStr('49492b00', '0800', '0000'))
+    expect(isTiff(img)).toBe(true)
+    expect(() => tiffSize(img)).toThrow('Invalid BigTIFF header')
+  })
+
+  it('should invalidate tiff with insufficient IFD remainder', () => {
+    const entry = hexStr('e703', '0300', '01000000', '07000000')
+    const img = bytesFromHex(hexStr('49492a00', '08000000', '0100', entry, '00'))
+    expect(isTiff(img)).toBe(true)
+    expect(() => tiffSize(img)).toThrow('Invalid Tiff. Missing tags')
+  })
+
   it('should invalidate tiff with oversized long8 value', () => {
     const count = '0100000000000000'
     const entry = hexStr('0001', '1000', '0100000000000000', '0000000000000010')

@@ -12,4 +12,8 @@ describe('supports > gif', () => {
     const img = await readValidImage('gif/sample.gif')
     expect(gifSize(img)).toEqual({ width: 123, height: 456 })
   })
+
+  it('should invalidate gif with truncated input', () => {
+    expect(() => gifSize(new TextEncoder().encode('GIF89a'))).toThrow('Invalid GIF')
+  })
 })

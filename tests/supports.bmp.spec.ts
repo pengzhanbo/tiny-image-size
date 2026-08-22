@@ -12,4 +12,8 @@ describe('supports > bmp', () => {
     const img = await readValidImage('bmp/sample.bmp')
     expect(bmpSize(img)).toEqual({ width: 123, height: 456 })
   })
+
+  it('should invalidate bmp with truncated input', () => {
+    expect(() => bmpSize(new Uint8Array([0x42, 0x4d]))).toThrow('Invalid BMP')
+  })
 })

@@ -22,4 +22,12 @@ describe('supports > ktx', () => {
     const img = await readValidImage('ktx/sample.ktx2')
     expect(ktxSize(img)).toEqual({ width: 123, height: 456 })
   })
+
+  it('should invalidate ktx with truncated input', () => {
+    expect(() => ktxSize(new TextEncoder().encode('XKTX 11X'))).toThrow('Invalid KTX')
+  })
+
+  it('should invalidate ktx2 with truncated input', () => {
+    expect(() => ktxSize(new TextEncoder().encode('XKTX 20X'))).toThrow('Invalid KTX')
+  })
 })

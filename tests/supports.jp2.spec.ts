@@ -26,4 +26,14 @@ describe('supports > jp2', () => {
       'Unsupported JPEG 2000 format',
     )
   })
+
+  it('should invalidate jp2 with truncated ihdr box', () => {
+    const sig = '0000000c' + '6a502020' + '00000000'
+    const ftyp = '00000014' + '66747970' + '6a703220' + '00000000' + '6a703220'
+    const jp2h = '00000014' + '6a703268'
+    const ihdr = '0000000c' + '69686472' + '00000000'
+    expect(() => jp2Size(bytesFromHex(sig + ftyp + jp2h + ihdr))).toThrow(
+      'Unsupported JPEG 2000 format',
+    )
+  })
 })

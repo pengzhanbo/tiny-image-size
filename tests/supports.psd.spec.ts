@@ -12,4 +12,8 @@ describe('supports > psd', () => {
     const img = await readValidImage('psd/sample.psd')
     expect(psdSize(img)).toEqual({ width: 123, height: 456 })
   })
+
+  it('should invalidate psd with truncated input', () => {
+    expect(() => psdSize(new TextEncoder().encode('8BPS'))).toThrow('Invalid PSD')
+  })
 })

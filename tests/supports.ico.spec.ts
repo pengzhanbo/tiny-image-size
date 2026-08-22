@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { isIco, icoSize } from '../src/supports/ico.js'
-import { readValidImage } from './helper.js'
+import { readValidImage, bytesFromHex, hexStr } from './helper.js'
 
 describe('supports > ico', () => {
   it('should validate ico type', async () => {
@@ -39,5 +39,11 @@ describe('supports > ico', () => {
     const compressed = await readValidImage('ico/multi-size-compressed.ico')
     expect(isIco(compressed)).toBe(true)
     expect(icoSize(compressed)).toEqual({ width: 256, height: 256 })
+  })
+
+  it('should throw for ico with incomplete header', () => {
+    const img = bytesFromHex(hexStr('0000', '0100', '0100'))
+    expect(isIco(img)).toBe(true)
+    expect(() => icoSize(img)).toThrow('Invalid ICO')
   })
 })

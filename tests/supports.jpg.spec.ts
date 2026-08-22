@@ -70,4 +70,16 @@ describe('supports > jpg', () => {
   it('should invalidate jpg with no size found', () => {
     expect(() => jpgSize(bytesFromHex(hexStr(APP0, 'ffd9')))).toThrow('Invalid JPG, no size found')
   })
+
+  it('should invalidate jpg with single trailing byte', () => {
+    expect(() => jpgSize(bytesFromHex(hexStr('ffd8', 'ff', '00', '00')))).toThrow(
+      'Invalid JPG, no size found',
+    )
+  })
+
+  it('should invalidate jpg with truncated SOF segment', () => {
+    expect(() => jpgSize(bytesFromHex(hexStr('ffd8ffe0', '0002ffc00000')))).toThrow(
+      'Invalid JPG, no size found',
+    )
+  })
 })

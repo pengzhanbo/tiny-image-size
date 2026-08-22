@@ -67,4 +67,46 @@ describe('supports > pnm', () => {
     expect(isPnm(img)).toBe(true)
     expect(() => pnmSize(img)).toThrow('Invalid PNM')
   })
+
+  it('should invalidate pnm with non-numeric width', () => {
+    const img = new TextEncoder().encode('P1\nabc def\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should invalidate pnm with non-numeric height', () => {
+    const img = new TextEncoder().encode('P1\n123 abc\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should invalidate pnm with negative width', () => {
+    const img = new TextEncoder().encode('P1\n-123 456\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should invalidate pnm with negative height', () => {
+    const img = new TextEncoder().encode('P1\n123 -456\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should invalidate pam with non-numeric width', () => {
+    const img = new TextEncoder().encode('P7\nWIDTH abc\nHEIGHT 456\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should invalidate pam with negative width', () => {
+    const img = new TextEncoder().encode('P7\nWIDTH -1\nHEIGHT 456\n')
+    expect(isPnm(img)).toBe(true)
+    expect(() => pnmSize(img)).toThrow('Invalid PNM')
+  })
+
+  it('should ignore non-dimension pam tokens', () => {
+    const img = new TextEncoder().encode('P7\nMAXVAL 255\nWIDTH 123\nHEIGHT 456\n')
+    expect(isPnm(img)).toBe(true)
+    expect(pnmSize(img)).toEqual({ width: 123, height: 456 })
+  })
 })

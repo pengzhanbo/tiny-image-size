@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { isPng, pngSize } from '../src/supports/png.js'
-import { readValidImage, readInvalidImage } from './helper.js'
+import { bytesFromHex, hexStr, readValidImage, readInvalidImage } from './helper.js'
 
 describe('supports > png', () => {
   it('should validate png type', async () => {
@@ -21,7 +21,18 @@ describe('supports > png', () => {
 
   it('should invalidate png', async () => {
     const img = await readInvalidImage('sample.png')
-    expect(() => isPng(img)).toThrow(TypeError)
-    expect(pngSize(img)).toEqual({ width: 123, height: 456 })
+    expect(isPng(img)).toBe(false)
+    expect(() => pngSize(img)).toThrow('Invalid PNG')
+  })
+
+  it('should invalidate png with non-IHDR first chunk', () => {
+    const img = bytesFromHex(hexStr('89504e47', '0d0a1a0a', '0000000d', '58585858'))
+    expect(isPng(img)).toBe(false)
+    expect(() => pngSize(img)).toThrow('Invalid PNG')
+  })
+
+  it('should invalidate truncated png with IHDR chunk', () => {
+    const img = bytesFromHex(hexStr('89504e47', '0d0a1a0a', '0000000d', '49484452'))
+    expect(() => pngSize(img)).toThrow('Invalid PNG')
   })
 })

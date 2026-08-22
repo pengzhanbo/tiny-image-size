@@ -29,7 +29,13 @@ describe('supports > webp', () => {
   })
 
   it('should invalidate webp with unknown chunk', () => {
-    const img = bytesFromHex(RIFF + hexStr('58585858', '00000000000000000000'))
+    const img = bytesFromHex(RIFF + hexStr('58585858', '0000000000000000000000000000'))
     expect(() => webpSize(img)).toThrow('Invalid WebP')
+  })
+
+  it('should invalidate webp with truncated input', () => {
+    expect(() =>
+      webpSize(new TextEncoder().encode('RIFF' + '\x00\x00\x00\x00' + 'WEBPVP8X')),
+    ).toThrow('Invalid WebP')
   })
 })

@@ -67,6 +67,14 @@ describe('supports > heif', () => {
     expect(() => heifSize(bytesFromHex(Ftyp + meta))).toThrow('Invalid HEIF, no ispe box found')
   })
 
+  it('should invalidate heif with truncated ispe box', () => {
+    const ispe = hexStr('0000000c', '69737065', '00000000')
+    const ipco = hexStr('00000014', '6970636f') + ispe
+    const iprp = hexStr('0000001c', '69707270') + ipco
+    const meta = hexStr('00000028', '6d657461', '00000000') + iprp
+    expect(() => heifSize(bytesFromHex(Ftyp + meta))).toThrow('Invalid HEIF, no ispe box found')
+  })
+
   it('should extract heif size with clap crop', () => {
     const ispe = hexStr('00000014', '69737065', '00000000', '0000007b', '000001c8')
     const clap = hexStr('00000010', '636c6170', '00000000', '00000001')
@@ -74,5 +82,23 @@ describe('supports > heif', () => {
     const iprp = hexStr('00000034', '69707270') + ipco
     const meta = hexStr('00000040', '6d657461', '00000000') + iprp
     expect(heifSize(bytesFromHex(Ftyp + meta))).toEqual({ width: 122, height: 456 })
+  })
+
+  it('should clamp heif clap crop width to zero', () => {
+    const ispe = hexStr('00000014', '69737065', '00000000', '0000007b', '000001c8')
+    const clap = hexStr('00000010', '636c6170', '00000000', '0000007b')
+    const ipco = hexStr('0000002c', '6970636f') + ispe + clap
+    const iprp = hexStr('00000034', '69707270') + ipco
+    const meta = hexStr('00000040', '6d657461', '00000000') + iprp
+    expect(heifSize(bytesFromHex(Ftyp + meta))).toEqual({ width: 0, height: 456 })
+  })
+
+  it('should ignore heif clap box smaller than 16 bytes', () => {
+    const ispe = hexStr('00000014', '69737065', '00000000', '0000007b', '000001c8')
+    const clap = hexStr('0000000c', '636c6170', '00000000')
+    const ipco = hexStr('00000028', '6970636f') + ispe + clap
+    const iprp = hexStr('00000030', '69707270') + ipco
+    const meta = hexStr('0000003c', '6d657461', '00000000') + iprp
+    expect(heifSize(bytesFromHex(Ftyp + meta))).toEqual({ width: 123, height: 456 })
   })
 })

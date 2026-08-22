@@ -34,4 +34,20 @@ describe('supports > jxl', () => {
   it('should invalidate jxl with truncated ftyp box', () => {
     expect(isJxl(bytesFromHex(hexStr('0000000c', '4a584c20', '00000000')))).toBe(false)
   })
+
+  it('should not hang with a size-0 jxlp box', () => {
+    const sig = hexStr('0000000c', '4a584c20', '00000000')
+    const ftyp = hexStr('00000010', '66747970', '6a786c20', '00000000')
+    const jxlp = hexStr('00000000', '6a786c70', '00000000')
+    expect(() => jxlSize(bytesFromHex(hexStr(sig, ftyp, jxlp)))).toThrow('Reached end of input')
+  }, 2000)
+
+  it('should break on an undersized jxlp box', () => {
+    const sig = hexStr('0000000c', '4a584c20', '00000000')
+    const ftyp = hexStr('00000010', '66747970', '6a786c20', '00000000')
+    const jxlp = hexStr('00000008', '6a786c70')
+    expect(() => jxlSize(bytesFromHex(hexStr(sig, ftyp, jxlp)))).toThrow(
+      'No codestream found in JXL container',
+    )
+  })
 })
