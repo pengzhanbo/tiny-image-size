@@ -43,6 +43,10 @@
     ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "prepare": "simple-git-hooks",
     "build": "tsdown",
