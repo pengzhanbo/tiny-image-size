@@ -1,6 +1,6 @@
 {
   "name": "tiny-image-size",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "get dimensions of image file (jpeg, png, webp, svg, tiff, etc)",
   "keywords": [
     "avif",
