@@ -1,6 +1,11 @@
 # tiny-image-size
 
-English | [简体中文](README.zh-CN.md)
+English | [简体中文](./README.zh-CN.md)
+
+[![npm version](https://img.shields.io/npm/v/tiny-image-size?style=flat-square)](https://www.npmjs.com/package/tiny-image-size)
+![npm download](https://img.shields.io/npm/dm/tiny-image-size?style=flat-square)
+![npm license](https://img.shields.io/npm/l/tiny-image-size?style=flat-square)
+[![codecov](https://codecov.io/gh/pengzhanbo/tiny-image-size/graph/badge.svg?token=07CV6YGT4Q)](https://codecov.io/gh/pengzhanbo/tiny-image-size)
 
 A zero-dependency TypeScript library that detects image type and dimensions (width/height) directly from raw bytes (`Uint8Array`). No runtime dependencies, works out of the box.
 
@@ -8,6 +13,7 @@ A zero-dependency TypeScript library that detects image type and dimensions (wid
 
 - Zero dependencies, single ESM bundle (~10 KB, including type declarations)
 - Fully typed with TypeScript
+- Any JavaScript Runtime Environment (Node.js, Bun, Deno, Browser, etc.)
 - Automatic type detection, or pass an explicit type to skip detection
 - Supports 20 common image formats:
   `bmp` · `cur` · `dds` · `gif` · `heif` · `icns` · `ico` · `j2c` · `jp2` · `jpg` · `jxl` · `jxl-stream` · `ktx` · `png` · `pnm` · `psd` · `svg` · `tga` · `tiff` · `webp`

@@ -1,6 +1,11 @@
 # tiny-image-size
 
-[English](README.md) | 简体中文
+[English](./README.md) | 简体中文
+
+[![npm version](https://img.shields.io/npm/v/tiny-image-size?style=flat-square)](https://www.npmjs.com/package/tiny-image-size)
+![npm download](https://img.shields.io/npm/dm/tiny-image-size?style=flat-square)
+![npm license](https://img.shields.io/npm/l/tiny-image-size?style=flat-square)
+[![codecov](https://codecov.io/gh/pengzhanbo/tiny-image-size/graph/badge.svg?token=07CV6YGT4Q)](https://codecov.io/gh/pengzhanbo/tiny-image-size)
 
 零依赖的 TypeScript 图像尺寸检测库 —— 从原始字节（`Uint8Array`）中识别图像类型并解析宽高，开箱即用，无任何运行时依赖。
 
@@ -8,6 +13,7 @@
 
 - 零依赖，单一 ESM 产物（约 10 KB，含类型声明）
 - 完整 TypeScript 类型支持
+- 支持任何 JavaScript 运行环境（Node.js、Bun、Deno、浏览器等）
 - 支持自动检测类型，也可显式指定类型以跳过检测
 - 支持 20 种常见图像格式：
   `bmp` · `cur` · `dds` · `gif` · `heif` · `icns` · `ico` · `j2c` · `jp2` · `jpg` · `jxl` · `jxl-stream` · `ktx` · `png` · `pnm` · `psd` · `svg` · `tga` · `tiff` · `webp`
